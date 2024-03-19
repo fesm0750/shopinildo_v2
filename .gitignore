@@ -1,0 +1,5 @@
+### VS Code ###
+.vscode/
+
+### Mongo ###
+mongo/data_db/

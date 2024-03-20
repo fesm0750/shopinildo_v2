@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/items")
 public class ItemController {
@@ -31,12 +33,12 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Item> createItem(@RequestBody Item item) {
+    public ResponseEntity<Item> createItem(@RequestBody @Valid Item item) {
         return ResponseEntity.ok(itemService.createItem(item));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Item> updateItem(@PathVariable String id, @RequestBody Item item) {
+    public ResponseEntity<Item> updateItem(@PathVariable String id, @RequestBody @Valid Item item) {
         return ResponseEntity.ok(itemService.updateItem(item));
     }
 

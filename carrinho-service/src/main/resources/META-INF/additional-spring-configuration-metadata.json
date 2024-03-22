@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "app.estoque-service.url",
+    "type": "java.lang.String",
+    "description": "Url do serviço de estoque."
+  },
+  {
+    "name": "app.item-service.url",
+    "type": "java.lang.String",
+    "description": "Url do serviço de gestão de itens."
+  }
+]}

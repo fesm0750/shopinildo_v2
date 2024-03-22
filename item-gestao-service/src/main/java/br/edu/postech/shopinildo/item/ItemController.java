@@ -1,6 +1,9 @@
 package br.edu.postech.shopinildo.item;
 
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -30,6 +34,11 @@ public class ItemController {
     @GetMapping("/{id}")
     public ResponseEntity<Item> findById(@PathVariable String id) {
         return ResponseEntity.ok(itemService.findById(id));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<Item>> findByIds(@RequestParam List<String> ids) {
+        return ResponseEntity.ok(itemService.findByIds(ids));
     }
 
     @PostMapping

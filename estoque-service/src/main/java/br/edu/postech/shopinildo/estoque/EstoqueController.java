@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.postech.shopinildo.estoque.request.EstoqueRequest;
+import br.edu.postech.shopinildo.estoque.response.AvailabilityResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -34,20 +37,25 @@ public class EstoqueController {
         return estoqueService.findByItemId(itemId);
     }
 
+    @GetMapping("/availability")
+    public AvailabilityResponse checkAvailability(@RequestParam List<String> itemIds) {
+        return estoqueService.checkAvailability(itemIds);
+    }
+
     @PutMapping("/{itemId}")
-    public ResponseEntity<Void> update(@PathVariable String itemId, @RequestBody @Valid EstoqueDTO request) {
+    public ResponseEntity<Void> update(@PathVariable String itemId, @RequestBody @Valid EstoqueRequest request) {
         estoqueService.save(itemId, request);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{itemId}/increase")
-    public ResponseEntity<Void> increase(@PathVariable String itemId, @RequestBody @Valid EstoqueDTO dto) {
+    public ResponseEntity<Void> increase(@PathVariable String itemId, @RequestBody @Valid EstoqueRequest dto) {
         estoqueService.increase(itemId, dto);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{itemId}/decrease")
-    public ResponseEntity<Void> decrease(@PathVariable String itemId, @RequestBody @Valid EstoqueDTO dto) {
+    public ResponseEntity<Void> decrease(@PathVariable String itemId, @RequestBody @Valid EstoqueRequest dto) {
         estoqueService.decrease(itemId, dto);
         return ResponseEntity.noContent().build();
     }

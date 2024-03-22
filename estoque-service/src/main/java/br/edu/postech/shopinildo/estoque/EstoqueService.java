@@ -11,6 +11,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import br.edu.postech.shopinildo.estoque.request.EstoqueRequest;
+import br.edu.postech.shopinildo.estoque.response.AvailabilityResponse;
+import br.edu.postech.shopinildo.estoque.response.ItemAvailableDTO;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 
@@ -38,7 +41,14 @@ public class EstoqueService {
         return estoque;
     }
 
-    public Estoque save(String itemId, EstoqueDTO dto) {
+    public AvailabilityResponse checkAvailability(List<String> itemIds) {
+        Query query = new Query(Criteria.where("itemId").in(itemIds));
+        List<Estoque> estoques = mongoTemplate.find(query, Estoque.class);
+        List<ItemAvailableDTO> list = estoques.stream().map(estoque -> new ItemAvailableDTO(estoque)).toList();
+        return new AvailabilityResponse(list);
+    }
+
+    public Estoque save(String itemId, EstoqueRequest dto) {
         return mongoTemplate.save(new Estoque(itemId, dto.quantity()));
     }
 
@@ -53,11 +63,11 @@ public class EstoqueService {
         return mongoTemplate.save(estoque);
     }
 
-    public Estoque increase(String itemId, EstoqueDTO dto) {
+    public Estoque increase(String itemId, EstoqueRequest dto) {
         return increment(itemId, dto.quantity());
     }
 
-    public Estoque decrease(String itemId, EstoqueDTO dto) {
+    public Estoque decrease(String itemId, EstoqueRequest dto) {
         return increment(itemId, -dto.quantity());
     }
 
@@ -79,4 +89,6 @@ public class EstoqueService {
             }
         }
     }
+
+
 }

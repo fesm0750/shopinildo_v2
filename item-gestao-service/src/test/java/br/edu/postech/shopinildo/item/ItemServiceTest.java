@@ -32,6 +32,7 @@ class ItemServiceTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void findAll() {
         Page<Item> items = mock(Page.class);
         when(itemRepository.findAll(PageRequest.of(0, 10))).thenReturn(items);

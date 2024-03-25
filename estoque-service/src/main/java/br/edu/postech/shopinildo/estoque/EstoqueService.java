@@ -41,9 +41,7 @@ public class EstoqueService {
         return estoque;
     }
 
-    public AvailabilityResponse checkAvailability(List<String> itemIds) {
-        Query query = new Query(Criteria.where("itemId").in(itemIds));
-        List<Estoque> estoques = mongoTemplate.find(query, Estoque.class);
+    public AvailabilityResponse checkInventory(List<String> itemIds) {
         List<ItemAvailableDTO> list = estoques.stream().map(estoque -> new ItemAvailableDTO(estoque)).toList();
         return new AvailabilityResponse(list);
     }

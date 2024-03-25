@@ -28,18 +28,19 @@ public class EstoqueController {
 
 
     @GetMapping
-    public List<Estoque> getAll(Pageable pageable) {
-        return estoqueService.findAll(pageable);
+    public ResponseEntity<List<Estoque>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(estoqueService.findAll(pageable));
     }
 
     @GetMapping("/{itemId}")
-    public Estoque findByItemId(@PathVariable String itemId) {
-        return estoqueService.findByItemId(itemId);
+    public ResponseEntity<Estoque> findByItemId(@PathVariable String itemId) {
+        return ResponseEntity.ok(estoqueService.findByItemId(itemId));
     }
 
     @GetMapping("/availability")
-    public AvailabilityResponse checkAvailability(@RequestParam List<String> itemIds) {
-        return estoqueService.checkAvailability(itemIds);
+    public ResponseEntity<AvailabilityResponse> checkInventory(@RequestParam List<String> itemIds) {
+        return ResponseEntity.ok(estoqueService.checkInventory(itemIds));
+    }
     }
 
     @PutMapping("/{itemId}")

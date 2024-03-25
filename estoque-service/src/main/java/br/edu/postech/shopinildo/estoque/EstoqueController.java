@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.postech.shopinildo.estoque.request.EstoqueRequest;
 import br.edu.postech.shopinildo.estoque.response.AvailabilityResponse;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/estoque")
@@ -49,13 +50,13 @@ public class EstoqueController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{itemId}/increase")
+    @PostMapping("/{itemId}/increase")
     public ResponseEntity<Void> increase(@PathVariable String itemId, @RequestBody @Valid EstoqueRequest dto) {
         estoqueService.increase(itemId, dto);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{itemId}/decrease")
+    @PostMapping("/{itemId}/decrease")
     public ResponseEntity<Void> decrease(@PathVariable String itemId, @RequestBody @Valid EstoqueRequest dto) {
         estoqueService.decrease(itemId, dto);
         return ResponseEntity.noContent().build();

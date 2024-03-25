@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.postech.shopinildo.estoque.request.EstoqueRequest;
+import br.edu.postech.shopinildo.estoque.request.ItemDTO;
 import br.edu.postech.shopinildo.estoque.response.AvailabilityResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +42,10 @@ public class EstoqueController {
     public ResponseEntity<AvailabilityResponse> checkInventory(@RequestParam List<String> itemIds) {
         return ResponseEntity.ok(estoqueService.checkInventory(itemIds));
     }
+
+    @PostMapping("/availability/order")
+    public ResponseEntity<AvailabilityResponse> checkOrderAvailability(@RequestBody List<ItemDTO> order) {
+        return ResponseEntity.ok(estoqueService.checkOrderAvailability(order));
     }
 
     @PutMapping("/{itemId}")
@@ -60,6 +64,12 @@ public class EstoqueController {
     public ResponseEntity<Void> decrease(@PathVariable String itemId, @RequestBody @Valid EstoqueRequest dto) {
         estoqueService.decrease(itemId, dto);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/update/order")
+    public ResponseEntity<Void> updateEstoqueFromOrder(@RequestBody List<ItemDTO> order) {
+        estoqueService.updateEstoqueFromOrder(order);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{itemId}")

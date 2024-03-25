@@ -1,17 +1,24 @@
 package br.edu.postech.shopinildo.estoque;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.BulkOperations;
+import org.springframework.data.mongodb.core.BulkOperations.BulkMode;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import br.edu.postech.shopinildo.estoque.request.EstoqueRequest;
+import br.edu.postech.shopinildo.estoque.request.ItemDTO;
 import br.edu.postech.shopinildo.estoque.response.AvailabilityResponse;
 import br.edu.postech.shopinildo.estoque.response.ItemAvailableDTO;
 import jakarta.validation.ConstraintViolationException;
@@ -41,7 +48,31 @@ public class EstoqueService {
         return estoque;
     }
 
+    public AvailabilityResponse checkOrderAvailability(List<ItemDTO> order) {
+        var result = getUpdatedEstoqueFromOrder(order).stream()
+                .map(e -> new ItemAvailableDTO(e))
+                .toList();
+
+        return new AvailabilityResponse(result);
+    }
+
+    @Transactional
+    public void updateEstoqueFromOrder(List<ItemDTO> order) {
+        List<Estoque> newEstoque = getUpdatedEstoqueFromOrder(order);
+        newEstoque.stream().forEach(this::validateEstoque);
+
+        // Bulky update
+        BulkOperations bulkOps = mongoTemplate.bulkOps(BulkMode.UNORDERED, Estoque.class);
+        newEstoque.stream().forEach(e -> {
+            Query query = new Query(Criteria.where("itemId").is(e.getItemId()));
+            Update update = new Update().set("quantity", e.getQuantity());
+            bulkOps.updateOne(query, update);
+        });
+        bulkOps.execute();
+    }
+
     public AvailabilityResponse checkInventory(List<String> itemIds) {
+        List<Estoque> estoques = findByItemIds(itemIds);
         List<ItemAvailableDTO> list = estoques.stream().map(estoque -> new ItemAvailableDTO(estoque)).toList();
         return new AvailabilityResponse(list);
     }
@@ -74,9 +105,9 @@ public class EstoqueService {
         mongoTemplate.remove(query, Estoque.class);
     }
 
-    //-----
+    // -----
     // Helper Methods
-    //-----
+    // -----
 
     private void validateEstoque(Estoque estoque) {
         // Validate the Estoque object using the validator
@@ -88,5 +119,27 @@ public class EstoqueService {
         }
     }
 
+    private List<Estoque> findByItemIds(List<String> itemIds) {
+        Query query = new Query(Criteria.where("itemId").in(itemIds));
+        return mongoTemplate.find(query, Estoque.class);
+    }
 
+    private List<Estoque> getUpdatedEstoqueFromOrder(List<ItemDTO> order) {
+        List<String> itemIds = order.stream().map(ItemDTO::itemId).toList();
+        List<Estoque> originalEstoques = findByItemIds(itemIds);
+
+        if (itemIds.size() != originalEstoques.size()) {
+            throw new IllegalArgumentException("One or more items does not exist");
+        }
+
+        // If list are of the same size, then they have the same elements
+        order.sort(Comparator.comparing(ItemDTO::itemId));
+        originalEstoques.sort(Comparator.comparing(Estoque::getItemId));
+
+        // Update
+        return IntStream.range(0, originalEstoques.size())
+                .mapToObj(i -> new Estoque(order.get(i).itemId(),
+                        originalEstoques.get(i).getQuantity() - order.get(i).quantity()))
+                .toList();
+    }
 }

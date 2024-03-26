@@ -3,6 +3,7 @@ package br.edu.postech.shopinildo.usuario;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import br.edu.postech.shopinildo.usuario.dto.LoginRequest;
 import br.edu.postech.shopinildo.usuario.dto.UserRequest;
 import br.edu.postech.shopinildo.usuario.dto.UserResponse;
 
@@ -28,20 +29,20 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@RequestParam String email, @RequestParam String password) {
-        var response = new UserResponse(userService.login(email, password));
+    @PostMapping("/api/login")
+    public ResponseEntity<UserResponse> login(@RequestBody LoginRequest loginRequest) {
+        var response = new UserResponse(userService.login(loginRequest));
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/update/password/{userId}")
-    public ResponseEntity<Void> updatePassword(@PathVariable Long userId, @RequestParam String newPassword) {
+    public ResponseEntity<Void> updatePassword(@PathVariable Long userId, @RequestBody String newPassword) {
         userService.updatePassword(userId, newPassword);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/update/email/{userId}")
-    public ResponseEntity<Void> updateEmail(@PathVariable Long userId, @RequestParam String newEmail) {
+    public ResponseEntity<Void> updateEmail(@PathVariable Long userId, @RequestBody String newEmail) {
         userService.updateEmail(userId, newEmail);
         return ResponseEntity.noContent().build();
     }

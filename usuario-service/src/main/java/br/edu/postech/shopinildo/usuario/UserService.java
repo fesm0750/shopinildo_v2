@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import br.edu.postech.shopinildo.usuario.dto.LoginRequest;
 import br.edu.postech.shopinildo.usuario.dto.UserRequest;
 
 // Todo: encrypt password
@@ -21,17 +22,17 @@ public class UserService {
 
     public User registerNewCustomer(UserRequest userRequestDTO) {
         return mongoTemplate
-                .save(new User(null, userRequestDTO.email(), userRequestDTO.password(), Role.ROLE_CUSTOMER));
+                .save(new User(null, userRequestDTO.email(), userRequestDTO.password(), Role.CUSTOMER));
     }
 
     public User registerNewAdmin(UserRequest userRequestDTO) {
         return mongoTemplate
-                .save(new User(null, userRequestDTO.email(), userRequestDTO.password(), Role.ROLE_ADMIN));
+                .save(new User(null, userRequestDTO.email(), userRequestDTO.password(), Role.ADMIN));
     }
 
-    public User login(String email, String password) {
+    public User login(LoginRequest login) {
         return mongoTemplate.findOne(
-                Query.query(Criteria.where("email").is(email).and("password").is(password)),
+                Query.query(Criteria.where("email").is(login.email()).and("password").is(login.password())),
                 User.class);
     }
 

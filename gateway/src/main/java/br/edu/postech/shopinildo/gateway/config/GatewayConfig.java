@@ -36,6 +36,7 @@ public class GatewayConfig {
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
+                // blocking api routes
                 .route("item-service", r -> r.path("/items/**")
                         .and().not(p -> p.path("/items/api/**"))
                         .filters(f -> f.filter(filter))
@@ -44,15 +45,17 @@ public class GatewayConfig {
                         .and().not(p -> p.path("/estoque/api/**"))
                         .filters(f -> f.filter(filter))
                         .uri(estoqueServiceUrl))
+                .route("usuario-service", r -> r.path("/users/**")
+                        .and().not(p -> p.path("/users/api/**"))
+                        .filters(f -> f.filter(filter))
+                        .uri(usuarioServiceUrl))
+                // No api routes
                 .route("carrinho-service", r -> r.path("/carrinho/**")
                         .filters(f -> f.filter(filter))
                         .uri(carrinhoServiceUrl))
                 .route("pedido-service", r -> r.path("/pedidos/**")
                         .filters(f -> f.filter(filter))
                         .uri(pedidoServiceUrl))
-                .route("usuario-service", r -> r.path("/users/**")
-                        .filters(f -> f.filter(filter))
-                        .uri(usuarioServiceUrl))
                 .build();
     }
 }

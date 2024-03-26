@@ -7,7 +7,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-
 import java.security.Key;
 import java.util.Date;
 
@@ -18,6 +17,8 @@ public class JwtUtil {
     private String secret;
 
     private Key key;
+
+    private long validityInMilliseconds = 86_400_000; // 1 day
 
     @PostConstruct
     public void init(){
@@ -34,6 +35,19 @@ public class JwtUtil {
 
     public boolean isInvalid(String token) {
         return this.isTokenExpired(token);
+    }
+
+    public String createToken(String userId, String role) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(userId)
+                .claim("role", role)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(key)
+                .compact();
     }
 
 }

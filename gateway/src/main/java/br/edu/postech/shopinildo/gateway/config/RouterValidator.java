@@ -10,9 +10,9 @@ import java.util.function.Predicate;
 public class RouterValidator {
 
     public static final List<String> openApiEndpoints = List.of(
+        "/auth",
             "/users/register/customer",
-            "/users/register/admin",
-            "/users/login"
+        "/users/register/admin"
     );
 
     // TODO: filters for customer and admin

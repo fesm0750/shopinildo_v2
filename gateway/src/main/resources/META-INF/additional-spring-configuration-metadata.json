@@ -1,0 +1,21 @@
+{"properties": [{
+  "name": "app.pagamento-mock.url",
+  "type": "java.lang.String",
+  "description": "A description for 'app.pagamento-mock.url'"
+}]}{"properties": [{
+  "name": "app.pedido-service.url",
+  "type": "java.lang.String",
+  "description": "A description for 'app.pedido-service.url'"
+}]}{"properties": [{
+  "name": "app.carrinho-service.url",
+  "type": "java.lang.String",
+  "description": "A description for 'app.carrinho-service.url'"
+}]}{"properties": [{
+  "name": "app.estoque-service.url",
+  "type": "java.lang.String",
+  "description": "A description for 'app.estoque-service.url'"
+}]}{"properties": [{
+  "name": "app.item-service.url",
+  "type": "java.lang.String",
+  "description": "A description for 'app.item-service.url'"
+}]}

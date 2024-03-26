@@ -6,9 +6,7 @@ A plataforma é construído sobre uma arquitetura de serviços e utiliza as func
 
 ## Módulos e Serviços
 
-- Gateway: roteamento de caminhos e controle de acesso dos endpoints;
-
-- Login: autenticação e autorização de usuários;
+- Gateway: roteamento de caminhos, controle de acesso dos endpoints, authentication and authorization;
 
 - Usuario: cadastro de clientes
 
@@ -16,11 +14,11 @@ A plataforma é construído sobre uma arquitetura de serviços e utiliza as func
 
 - Estoque: controle de estoque
 
-- Preço: histórico de preços
+- Carrinho: carrinho de compras do cliente/usuário
 
-- carrinho: carrinho de compras do cliente/usuário
+- Pedido
 
-- pagamento: mock do sistema de pagamento e efetivação de compra
+- Pagamento Mock: mock do sistema de pagamento e efetivação de compra
 
 ## Banco de Dados Local
 
@@ -32,4 +30,8 @@ Para subir o banco de dados local:
 cd mongo
 docker compose up -d
 ```
+
+## Como executar
+
+Subir o banco de dados e executar todas as aplicaçõesna lista de Módulos e Serviços.
 

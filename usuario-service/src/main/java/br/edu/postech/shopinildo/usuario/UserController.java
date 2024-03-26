@@ -30,9 +30,8 @@ public class UserController {
     }
 
     @PostMapping("/api/login")
-    public ResponseEntity<UserResponse> login(@RequestBody LoginRequest loginRequest) {
-        var response = new UserResponse(userService.login(loginRequest));
-        return ResponseEntity.ok(response);
+    public UserResponse login(@RequestBody LoginRequest loginRequest) {
+        return new UserResponse(userService.login(loginRequest));
     }
 
     @PatchMapping("/update/password/{userId}")

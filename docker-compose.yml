@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+
+  mongodb:
+    extends:
+      file: mongo/docker-compose.yml
+      service: mongo
+  
+  mongoexpress:
+    extends:
+      file: mongo/docker-compose.yml
+      service: mongo-express
+
+  carrinho-service:
+    build: carrinho-service/.
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+
+  estoque-service:
+    build: estoque-service/.
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+
+  item-service:
+    build: item-gestao-service/.
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+
+  pedido-service:
+    build: pedido-service/.
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+
+  usuario-service:
+    build: usuario-service/.
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+
+  gateway:
+    build: gateway/.
+    ports:
+      - "8080:8080"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+
+  pagamento-mock:
+    build: pagamento-mock/.
+      
+volumes:
+  mongo-data:
+    driver: local

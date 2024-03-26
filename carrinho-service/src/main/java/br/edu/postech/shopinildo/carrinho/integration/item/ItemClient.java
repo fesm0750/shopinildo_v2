@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "item-gestao-service", url = "${app.item-service.url}")
 public interface ItemClient {
 
-    @GetMapping("/items/list")
+    @GetMapping("/items/api/list")
     List<ItemResponse> findByIds(@RequestParam List<String> ids);
 }

@@ -36,7 +36,7 @@ public class ItemController {
         return ResponseEntity.ok(itemService.findById(id));
     }
 
-    @GetMapping("/list")
+    @GetMapping("/api/list")
     public ResponseEntity<List<Item>> findByIds(@RequestParam List<String> ids) {
         return ResponseEntity.ok(itemService.findByIds(ids));
     }

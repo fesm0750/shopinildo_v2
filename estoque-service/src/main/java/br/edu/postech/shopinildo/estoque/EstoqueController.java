@@ -38,16 +38,6 @@ public class EstoqueController {
         return ResponseEntity.ok(estoqueService.findByItemId(itemId));
     }
 
-    @GetMapping("/availability")
-    public ResponseEntity<AvailabilityResponse> checkInventory(@RequestParam List<String> itemIds) {
-        return ResponseEntity.ok(estoqueService.checkInventory(itemIds));
-    }
-
-    @PostMapping("/availability/order")
-    public ResponseEntity<AvailabilityResponse> checkOrderAvailability(@RequestBody List<ItemDTO> order) {
-        return ResponseEntity.ok(estoqueService.checkOrderAvailability(order));
-    }
-
     @PutMapping("/{itemId}")
     public ResponseEntity<Void> update(@PathVariable String itemId, @RequestBody @Valid EstoqueRequest request) {
         estoqueService.save(itemId, request);
@@ -66,16 +56,26 @@ public class EstoqueController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/update/order")
-    public ResponseEntity<Void> updateEstoqueFromOrder(@RequestBody List<ItemDTO> order) {
-        estoqueService.updateEstoqueFromOrder(order);
-        return ResponseEntity.ok().build();
-    }
-
     @DeleteMapping("/{itemId}")
     public ResponseEntity<Void> delete(@PathVariable String itemId) {
         estoqueService.delete(itemId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/api/availability")
+    public ResponseEntity<AvailabilityResponse> checkInventory(@RequestParam List<String> itemIds) {
+        return ResponseEntity.ok(estoqueService.checkInventory(itemIds));
+    }
+
+    @PostMapping("/api/availability/order")
+    public ResponseEntity<AvailabilityResponse> checkOrderAvailability(@RequestBody List<ItemDTO> order) {
+        return ResponseEntity.ok(estoqueService.checkOrderAvailability(order));
+    }
+
+    @PostMapping("/api/update/order")
+    public ResponseEntity<Void> updateEstoqueFromOrder(@RequestBody List<ItemDTO> order) {
+        estoqueService.updateEstoqueFromOrder(order);
+        return ResponseEntity.ok().build();
     }
 }
 

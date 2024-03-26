@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "estoque-service", url = "${app.estoque-service.url}")
 public interface EstoqueClient {
-    @PostMapping("/update/order")
+    @PostMapping("/estoque/api/update/order")
     public ResponseEntity<Void> updateEstoqueFromOrder(@RequestBody List<ItemQuantityDTO> order);
 }

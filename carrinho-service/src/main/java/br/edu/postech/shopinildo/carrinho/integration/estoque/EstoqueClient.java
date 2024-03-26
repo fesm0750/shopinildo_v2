@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "estoque-service", url = "${app.estoque-service.url}")
 public interface EstoqueClient {
 
-    @GetMapping("estoque/availability")
+    @GetMapping("estoque/api/availability")
     ResponseEntity<EstoqueAvailableResponse> available(@RequestParam List<String> itemIds);
 
-    @PostMapping("estoque/availability/order")
+    @PostMapping("estoque/api/availability/order")
     ResponseEntity<EstoqueAvailableResponse> availableByOrderResponse(@RequestBody List<ItemQuantityDTO> items);
 }
